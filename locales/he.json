@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "טוען...",
+    "error": "שגיאה",
+    "retry": "נסה שוב",
+    "cancel": "ביטול",
+    "save": "שמור",
+    "delete": "מחק",
+    "edit": "ערוך",
+    "share": "שתף",
+    "report": "דווח",
+    "block": "חסום",
+    "follow": "עקוב",
+    "unfollow": "בטל עקיבה",
+    "back": "חזור",
+    "next": "הבא",
+    "done": "סיום"
+  },
+  "auth": {
+    "welcome": "ברוכים הבאים ל-StoryConnect",
+    "signIn": "התחבר",
+    "signUp": "הירשם",
+    "signOut": "התנתק",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "phone": "טלפון",
+    "handle": "שם משתמש",
+    "displayName": "שם תצוגה",
+    "bio": "אודות",
+    "avatar": "תמונת פרופיל",
+    "pickHandle": "בחר שם משתמש",
+    "handlePlaceholder": "שם משתמש ייחודי",
+    "handleError": "שם משתמש חייב להיות 3-20 תווים",
+    "suggestedFollows": "הצעות מעקב",
+    "getStarted": "התחל",
+    "byContinuing": "על ידי המשך, אתה מסכם לתנאי השירות והפרטיות שלנו",
+    "viewAnalytics": "צפה באנליטיקה והירשמות",
+    "shareStoriesThatDisappearIn24Hours": "שתף סטוריז שמתבטלים ב-24 שעות",
+    "sharePhotosVideosText": "שתף תמונות, וידאו וטקסט",
+    "autoDeleteAfter24Hours": "מחק אוטומטית ב-24 שעות",
+    "followersOnlyOrPublic": "עוקבים בלבד או ציבורי"
+  },
+  "home": {
+    "title": "סטוריז",
+    "noStories": "אין סטוריז חדשים",
+    "refresh": "רענן",
+    "yourStories": "הסטוריז שלך"
+  },
+  "story": {
+    "viewer": {
+      "tapToAdvance": "הקש לקידום",
+      "longPressToPause": "החזק לעצירה",
+      "reply": "הגב",
+      "like": "אהבתי",
+      "share": "שתף",
+      "report": "דווח",
+      "messageOnWhatsApp": "הודעה ב-WhatsApp",
+      "viewedBy": "נצפה על ידי",
+      "expiresIn": "פג תוקף בעוד",
+      "hours": "שעות",
+      "minutes": "דקות"
+    },
+    "create": {
+      "title": "צרו סטורי",
+      "camera": "מצלמה",
+      "gallery": "גלריה",
+      "text": "טקסט",
+      "addText": "הוסף טקסט",
+      "textPlaceholder": "מה קורה?",
+      "visibility": "נראות",
+      "followersOnly": "עוקבים בלבד",
+      "public": "ציבורי",
+      "post": "פרסום",
+      "posting": "מפרסם...",
+      "postWarning": "יימחק בעוד 24 שעות",
+      "moderationPending": "ממתין לאישור",
+      "moderationRejected": "הסטורי נדחה",
+      "moderationReason": "סיבת הדחייה"
+    },
+    "types": {
+      "text": "טקסט",
+      "image": "תמונה",
+      "video": "וידאו"
+    },
+    "moderation": {
+      "status": {
+        "pending": "ממתין לאישור",
+        "approved": "אושר",
+        "rejected": "נדחה",
+        "shadow": "מוסתר"
+      }
+    }
+  },
+  "profile": {
+    "title": "פרופיל",
+    "editProfile": "ערוך פרופיל",
+    "settings": "הגדרות",
+    "followers": "עוקבים",
+    "following": "עוקב אחרי",
+    "stories": "סטוריז",
+    "activeStories": "סטוריז פעילים",
+    "noStories": "אין סטוריז פעילים",
+    "whatsapp": {
+      "title": "הגדרות WhatsApp",
+      "enable": "אפשר קבלת הודעות ב-WhatsApp",
+      "followersOnly": "עוקבים בלבד",
+      "everyone": "כולם",
+      "off": "כבוי",
+      "verifyPhone": "אמת מספר טלפון",
+      "phonePlaceholder": "מספר טלפון עם קוד מדינה",
+      "verifyCode": "קוד אימות",
+      "codeSent": "קוד נשלח ל-{phone}",
+      "verify": "אמת",
+      "verified": "מאומת",
+      "private": "מספר הטלפון שלך פרטי"
+    }
+  },
+  "activity": {
+    "title": "פעילות",
+    "notifications": "התראות",
+    "analytics": "אנליטיקות",
+    "newFollower": "עוקב חדש",
+    "newReaction": "תגובה חדשה",
+    "newComment": "תגובה חדשה",
+    "storyApproved": "הסטורי שלך אושר",
+    "storyRejected": "הסטורי שלך נדחה"
+  },
+  "analytics": {
+    "title": "סטטיסטיקות",
+    "last7Days": "7 ימים אחרונים",
+    "last28Days": "28 ימים אחרונים",
+    "views": "צפיות",
+    "uniqueViewers": "צופים ייחודיים",
+    "completionRate": "אחוז השלמה",
+    "reactions": "תגובות",
+    "comments": "תגובות",
+    "whatsappClicks": "קליקים ל-WhatsApp",
+    "newFollowers": "עוקבים חדשים",
+    "engagement": "אינטראקציה",
+    "reach": "היקף"
+  },
+  "admin": {
+    "title": "ניהול",
+    "moderation": "מודרציה",
+    "queue": "תור סקירה",
+    "review": "סקירה",
+    "approve": "אשר",
+    "reject": "דחה",
+    "shadow": "הסתר",
+    "reason": "סיבה",
+    "riskScore": "ציון סיכון",
+    "tags": "תגיות",
+    "analytics": "אנליטיקות מערכת",
+    "dau": "משתמשים יומיים",
+    "mau": "משתמשים חודשיים",
+    "riskyContent": "תוכן בעייתי",
+    "avgModerationTime": "זמן מודרציה ממוצע"
+  },
+  "errors": {
+    "network": "בעיית רשת",
+    "server": "שגיאת שרת",
+    "permission": "אין הרשאה",
+    "notFound": "לא נמצא",
+    "invalidInput": "קלט לא תקין",
+    "rateLimit": "יותר מדי בקשות",
+    "moderationFailed": "כשל במודרציה"
+  },
+  "success": {
+    "storyPosted": "הסטורי פורסם",
+    "profileUpdated": "הפרופיל עודכן",
+    "settingsSaved": "ההגדרות נשמרו",
+    "phoneVerified": "הטלפון אומת"
+  }
+}
+

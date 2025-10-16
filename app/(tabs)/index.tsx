@@ -1,98 +1,294 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+  Image,
+} from 'react-native';
+import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTranslation } from '@/lib/i18n';
+import { useAuthStore } from '@/store/authStore';
+import { useStoriesStore } from '@/store/storiesStore';
+import { Colors } from '@/constants/Colors';
+import { Layout } from '@/constants/Layout';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+interface StoryPreviewProps {
+  story: any;
+  onPress: () => void;
+}
+
+function StoryPreview({ story, onPress }: StoryPreviewProps) {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
+
+  const getTimeUntilExpiry = () => {
+    const now = new Date();
+    const expiry = new Date(story.expiresAt);
+    const diff = expiry.getTime() - now.getTime();
+    
+    if (diff <= 0) return '0m';
+    
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (hours > 0) {
+      return `${hours}h`;
+    }
+    return `${minutes}m`;
+  };
+
+  return (
+    <TouchableOpacity style={styles.storyPreview} onPress={onPress}>
+      <View style={[styles.storyRing, { borderColor: colors.secondary }]}>
+        <Image
+          source={{ uri: story.author?.avatarUrl || 'https://via.placeholder.com/60' }}
+          style={[styles.avatar, { backgroundColor: colors.surface }]}
+        />
+      </View>
+      <Text style={[styles.storyAuthor, { color: colors.text }]} numberOfLines={1}>
+        {story.author?.displayName || story.author?.handle}
+      </Text>
+      <Text style={[styles.storyTime, { color: colors.textSecondary }]}>
+        {getTimeUntilExpiry()}
+      </Text>
+    </TouchableOpacity>
+  );
+}
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const colorScheme = useColorScheme();
+  const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuthStore();
+  const { stories, loadStories, isLoading } = useStoriesStore();
+  const colors = Colors[colorScheme ?? 'light'];
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadStories();
+    }
+  }, [isAuthenticated, loadStories]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadStories();
+    setRefreshing(false);
+  };
+
+  const openStoryViewer = (storyIndex: number) => {
+    router.push({
+      pathname: '/story-viewer',
+      params: { initialIndex: storyIndex },
+    });
+  };
+
+  const renderStory = ({ item, index }: { item: any; index: number }) => (
+    <StoryPreview
+      story={item}
+      onPress={() => openStoryViewer(index)}
+    />
+  );
+
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.centered}>
+          <Ionicons name="lock-closed" size={64} color={colors.textSecondary} />
+          <Text style={[styles.message, { color: colors.text }]}>
+            Please sign in to view stories
+          </Text>
+          <TouchableOpacity
+            style={[styles.signInButton, { backgroundColor: colors.secondary }]}
+            onPress={() => router.push('/(auth)/sign-in')}
+          >
+            <Text style={[styles.signInButtonText, { color: colors.primary }]}>
+              {t('auth.signIn')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.header}>
+        <Text style={[styles.title, { color: colors.text }]}>
+          {t('home.title')}
+        </Text>
+        <TouchableOpacity onPress={onRefresh} disabled={isLoading}>
+          <Ionicons 
+            name="refresh" 
+            size={24} 
+            color={colors.textSecondary} 
+            style={[styles.refreshIcon, isLoading && styles.refreshIconSpinning]}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {stories.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Ionicons name="images-outline" size={64} color={colors.textSecondary} />
+          <Text style={[styles.emptyTitle, { color: colors.text }]}>
+            {t('home.noStories')}
+          </Text>
+          <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
+            Follow some people to see their stories, or create your own!
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={stories}
+          renderItem={renderStory}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.storiesList}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.secondary}
+            />
+          }
+        />
+      )}
+
+      {/* Your Stories Section */}
+      <View style={styles.yourStoriesSection}>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('home.yourStories')}
+        </Text>
+        <TouchableOpacity
+          style={[styles.createStoryButton, { backgroundColor: colors.surface }]}
+          onPress={() => router.push('/(tabs)/create')}
+        >
+          <Ionicons name="add" size={24} color={colors.secondary} />
+          <Text style={[styles.createStoryText, { color: colors.text }]}>
+            Create Story
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Layout.spacing.lg,
+    paddingVertical: Layout.spacing.md,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  refreshIcon: {
+    padding: Layout.spacing.sm,
+  },
+  refreshIconSpinning: {
+    transform: [{ rotate: '360deg' }],
+  },
+  storiesList: {
+    paddingHorizontal: Layout.spacing.md,
+    gap: Layout.spacing.md,
+  },
+  storyPreview: {
+    alignItems: 'center',
+    marginHorizontal: Layout.spacing.sm,
+    width: 80,
+  },
+  storyRing: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Layout.spacing.sm,
+  },
+  avatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+  },
+  storyAuthor: {
+    fontSize: 12,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  storyTime: {
+    fontSize: 10,
+    marginTop: 2,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Layout.spacing.xl,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginTop: Layout.spacing.lg,
+    marginBottom: Layout.spacing.sm,
+  },
+  emptySubtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Layout.spacing.xl,
+  },
+  message: {
+    fontSize: 18,
+    marginVertical: Layout.spacing.lg,
+    textAlign: 'center',
+  },
+  signInButton: {
+    paddingVertical: Layout.spacing.md,
+    paddingHorizontal: Layout.spacing.xl,
+    borderRadius: Layout.borderRadius.lg,
+  },
+  signInButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  yourStoriesSection: {
+    paddingHorizontal: Layout.spacing.lg,
+    paddingVertical: Layout.spacing.lg,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: Layout.spacing.md,
+  },
+  createStoryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    paddingVertical: Layout.spacing.md,
+    borderRadius: Layout.borderRadius.lg,
+    gap: Layout.spacing.sm,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  createStoryText: {
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

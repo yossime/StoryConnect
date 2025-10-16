@@ -1,14 +1,32 @@
-import { View, type ViewProps } from 'react-native';
+import { View, type ViewProps } from "react-native";
 
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { useRTL } from "@/hooks/use-rtl";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
   darkColor?: string;
+  rtlAware?: boolean;
 };
 
-export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+export function ThemedView({
+  style,
+  lightColor,
+  darkColor,
+  rtlAware = true,
+  ...otherProps
+}: ThemedViewProps) {
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "background"
+  );
+  const { isRTL } = useRTL();
 
-  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+  const combinedStyle = [
+    { backgroundColor },
+    rtlAware && isRTL && { direction: "rtl" as const },
+    style,
+  ];
+
+  return <View style={combinedStyle} {...otherProps} />;
 }

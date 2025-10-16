@@ -1,0 +1,42 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Create a simple Express server for the analytics service
+RUN echo 'const express = require("express"); \
+const app = express(); \
+app.use(express.json()); \
+\
+app.post("/track", (req, res) => { \
+  const { user_id, event_type, data } = req.body; \
+  \
+  console.log(`Tracking event: ${event_type} for user ${user_id}`, data); \
+  \
+  res.json({ \
+    success: true \
+  }); \
+}); \
+\
+app.get("/stats", (req, res) => { \
+  res.json({ \
+    total_users: 1000, \
+    total_stories: 5000, \
+    daily_active_users: 500, \
+    engagement_rate: 0.75 \
+  }); \
+}); \
+\
+app.listen(8082, () => { \
+  console.log("Analytics service running on port 8082"); \
+});' > server.js
+
+EXPOSE 8082
+
+CMD ["node", "server.js"]
+

@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # Supabase Local Development
+  supabase:
+    image: supabase/postgres:15.1.0.147
+    container_name: storyconnect-supabase
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: storyconnect
+    ports:
+      - "5432:5432"
+    volumes:
+      - supabase_data:/var/lib/postgresql/data
+      - ./supabase/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - storyconnect-network
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: storyconnect-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - storyconnect-network
+
+  # MinIO for local S3-compatible storage
+  minio:
+    image: minio/minio:latest
+    container_name: storyconnect-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - storyconnect-network
+
+  # AI Moderation Service (Mock)
+  moderation-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.moderation
+    container_name: storyconnect-moderation
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    networks:
+      - storyconnect-network
+
+  # Push Notification Service (Mock)
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.notifications
+    container_name: storyconnect-notifications
+    ports:
+      - "8081:8081"
+    environment:
+      - NODE_ENV=development
+      - PORT=8081
+    networks:
+      - storyconnect-network
+
+  # Analytics Service (Mock)
+  analytics-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.analytics
+    container_name: storyconnect-analytics
+    ports:
+      - "8082:8082"
+    environment:
+      - NODE_ENV=development
+      - PORT=8082
+      - DATABASE_URL=postgresql://postgres:postgres@supabase:5432/storyconnect
+    depends_on:
+      - supabase
+    networks:
+      - storyconnect-network
+
+volumes:
+  supabase_data:
+  redis_data:
+  minio_data:
+
+networks:
+  storyconnect-network:
+    driver: bridge
+

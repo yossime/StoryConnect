@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "share": "Share",
+    "report": "Report",
+    "block": "Block",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done"
+  },
+  "auth": {
+    "welcome": "Welcome to StoryConnect",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone",
+    "handle": "Username",
+    "displayName": "Display Name",
+    "bio": "Bio",
+    "avatar": "Profile Picture",
+    "pickHandle": "Pick Username",
+    "handlePlaceholder": "Unique username",
+    "handleError": "Username must be 3-20 characters",
+    "suggestedFollows": "Suggested Follows",
+    "getStarted": "Get Started",
+    "byContinuing": "By continuing, you agree to our Terms of Service and Privacy Policy",
+    "viewAnalytics": "View analytics & engagement",
+    "shareStoriesThatDisappearIn24Hours": "Share stories that disappear in 24 hours",
+    "sharePhotosVideosText": "Share photos, videos & text",
+    "autoDeleteAfter24Hours": "Auto-delete after 24 hours",
+    "followersOnlyOrPublic": "Followers-only or public"
+  },
+  "home": {
+    "title": "Stories",
+    "noStories": "No new stories",
+    "refresh": "Refresh",
+    "yourStories": "Your Stories"
+  },
+  "story": {
+    "viewer": {
+      "tapToAdvance": "Tap to advance",
+      "longPressToPause": "Long press to pause",
+      "reply": "Reply",
+      "like": "Like",
+      "share": "Share",
+      "report": "Report",
+      "messageOnWhatsApp": "Message on WhatsApp",
+      "viewedBy": "Viewed by",
+      "expiresIn": "Expires in",
+      "hours": "hours",
+      "minutes": "minutes"
+    },
+    "create": {
+      "title": "Create Story",
+      "camera": "Camera",
+      "gallery": "Gallery",
+      "text": "Text",
+      "addText": "Add text",
+      "textPlaceholder": "What's happening?",
+      "visibility": "Visibility",
+      "followersOnly": "Followers only",
+      "public": "Public",
+      "post": "Post",
+      "posting": "Posting...",
+      "postWarning": "Auto-deletes in 24h",
+      "moderationPending": "Pending review",
+      "moderationRejected": "Story rejected",
+      "moderationReason": "Rejection reason"
+    },
+    "types": {
+      "text": "Text",
+      "image": "Image",
+      "video": "Video"
+    },
+    "moderation": {
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "shadow": "Shadow"
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit Profile",
+    "settings": "Settings",
+    "followers": "Followers",
+    "following": "Following",
+    "stories": "Stories",
+    "activeStories": "Active Stories",
+    "noStories": "No active stories",
+    "whatsapp": {
+      "title": "WhatsApp Settings",
+      "enable": "Allow WhatsApp messages",
+      "followersOnly": "Followers only",
+      "everyone": "Everyone",
+      "off": "Off",
+      "verifyPhone": "Verify phone number",
+      "phonePlaceholder": "Phone number with country code",
+      "verifyCode": "Verification code",
+      "codeSent": "Code sent to {phone}",
+      "verify": "Verify",
+      "verified": "Verified",
+      "private": "Your phone number is private"
+    }
+  },
+  "activity": {
+    "title": "Activity",
+    "notifications": "Notifications",
+    "analytics": "Analytics",
+    "newFollower": "New follower",
+    "newReaction": "New reaction",
+    "newComment": "New comment",
+    "storyApproved": "Your story was approved",
+    "storyRejected": "Your story was rejected"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "last7Days": "Last 7 days",
+    "last28Days": "Last 28 days",
+    "views": "Views",
+    "uniqueViewers": "Unique viewers",
+    "completionRate": "Completion rate",
+    "reactions": "Reactions",
+    "comments": "Comments",
+    "whatsappClicks": "WhatsApp clicks",
+    "newFollowers": "New followers",
+    "engagement": "Engagement",
+    "reach": "Reach"
+  },
+  "admin": {
+    "title": "Admin",
+    "moderation": "Moderation",
+    "queue": "Review Queue",
+    "review": "Review",
+    "approve": "Approve",
+    "reject": "Reject",
+    "shadow": "Shadow",
+    "reason": "Reason",
+    "riskScore": "Risk Score",
+    "tags": "Tags",
+    "analytics": "System Analytics",
+    "dau": "Daily Active Users",
+    "mau": "Monthly Active Users",
+    "riskyContent": "Risky Content",
+    "avgModerationTime": "Avg Moderation Time"
+  },
+  "errors": {
+    "network": "Network error",
+    "server": "Server error",
+    "permission": "No permission",
+    "notFound": "Not found",
+    "invalidInput": "Invalid input",
+    "rateLimit": "Too many requests",
+    "moderationFailed": "Moderation failed"
+  },
+  "success": {
+    "storyPosted": "Story posted",
+    "profileUpdated": "Profile updated",
+    "settingsSaved": "Settings saved",
+    "phoneVerified": "Phone verified"
+  }
+}
+

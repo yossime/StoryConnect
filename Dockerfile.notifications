@@ -1,0 +1,44 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Create a simple Express server for the notification service
+RUN echo 'const express = require("express"); \
+const app = express(); \
+app.use(express.json()); \
+\
+app.post("/send", (req, res) => { \
+  const { type, title, body, user_id } = req.body; \
+  \
+  console.log(`Sending notification to user ${user_id}: ${title} - ${body}`); \
+  \
+  res.json({ \
+    success: true, \
+    message_id: `msg_${Date.now()}` \
+  }); \
+}); \
+\
+app.post("/register", (req, res) => { \
+  const { user_id, token } = req.body; \
+  \
+  console.log(`Registering user ${user_id} with token ${token}`); \
+  \
+  res.json({ \
+    success: true \
+  }); \
+}); \
+\
+app.listen(8081, () => { \
+  console.log("Notification service running on port 8081"); \
+});' > server.js
+
+EXPOSE 8081
+
+CMD ["node", "server.js"]
+

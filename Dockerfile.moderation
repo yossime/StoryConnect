@@ -1,0 +1,71 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY lib/moderation.ts ./
+COPY lib/supabase.ts ./
+
+# Create a simple Express server for the moderation service
+RUN echo 'const express = require("express"); \
+const app = express(); \
+app.use(express.json()); \
+\
+app.post("/moderate", (req, res) => { \
+  const { type, text, media_url } = req.body; \
+  \
+  let risk = 0.1; \
+  let tags = []; \
+  \
+  if (type === "TEXT" && text) { \
+    const lowerText = text.toLowerCase(); \
+    if (lowerText.includes("hate") || lowerText.includes("violence")) { \
+      risk = 0.8; \
+      tags.push("harmful_content"); \
+    } \
+  } \
+  \
+  const decision = risk >= 0.7 ? "REJECTED" : risk >= 0.4 ? "PENDING" : "APPROVED"; \
+  \
+  res.json({ \
+    risk, \
+    tags, \
+    decision, \
+    confidence: 0.8 \
+  }); \
+}); \
+\
+app.post("/moderate-deep", (req, res) => { \
+  setTimeout(() => { \
+    res.json({ \
+      risk: 0.2, \
+      tags: [], \
+      decision: "APPROVED", \
+      confidence: 0.9 \
+    }); \
+  }, 1000); \
+}); \
+\
+app.post("/moderate-image", (req, res) => { \
+  res.json({ \
+    risk: 0.2, \
+    tags: [], \
+    decision: "APPROVED", \
+    confidence: 0.7 \
+  }); \
+}); \
+\
+app.listen(8080, () => { \
+  console.log("Moderation service running on port 8080"); \
+});' > server.js
+
+EXPOSE 8080
+
+CMD ["node", "server.js"]
+

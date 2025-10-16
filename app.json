@@ -1,25 +1,42 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "StoryConnect",
+    "slug": "storyconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "storyconnect",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "locales": {
+      "he": "./locales/he.json",
+      "en": "./locales/en.json"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.storyconnect.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "StoryConnect needs access to your camera to create stories with photos and videos.",
+        "NSMicrophoneUsageDescription": "StoryConnect needs access to your microphone to record videos for your stories.",
+        "NSPhotoLibraryUsageDescription": "StoryConnect needs access to your photo library to select images and videos for your stories."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#111111",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.storyconnect.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "output": "static",
@@ -33,12 +50,33 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#111111",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#111111"
           }
         }
-      ]
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow StoryConnect to access your camera to create stories with photos and videos."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow StoryConnect to access your photos to create stories.",
+          "savePhotosPermission": "Allow StoryConnect to save photos to your library.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow StoryConnect to access your photos to create stories."
+        }
+      ],
+      "expo-av"
     ],
     "experiments": {
       "typedRoutes": true,
