@@ -14,7 +14,7 @@ const translations = {
 };
 
 class I18n {
-  private currentLocale: Locale = "en"; // Default to Hebrew
+  private currentLocale: Locale = "he"; // Default to Hebrew
   private translations = translations;
 
   constructor() {
@@ -145,30 +145,11 @@ class I18n {
     return translation;
   }
 
-  // Get all available locales
-  getAvailableLocales(): Locale[] {
-    return Object.keys(this.translations) as Locale[];
-  }
-
   // Check if current locale is RTL
   isRTL(): boolean {
-    return this.currentLocale === "he";
+    return this.currentLocale === "en" ? false : true;
   }
 
-  // Get RTL-aware text alignment
-  getTextAlign(): "left" | "right" {
-    return this.isRTL() ? "right" : "left";
-  }
-
-  // Get RTL-aware flex direction for horizontal layouts
-  getFlexDirection(): "row" | "row-reverse" {
-    return this.isRTL() ? "row-reverse" : "row";
-  }
-
-  // Get RTL-aware writing direction
-  getWritingDirection(): "ltr" | "rtl" {
-    return this.isRTL() ? "rtl" : "ltr";
-  }
 }
 
 export const i18n = new I18n();
@@ -181,8 +162,5 @@ export const useTranslation = () => {
     locale: i18n.getLocale(),
     setLocale: i18n.setLocale.bind(i18n),
     isRTL: i18n.isRTL(),
-    textAlign: i18n.getTextAlign(),
-    flexDirection: i18n.getFlexDirection(),
-    writingDirection: i18n.getWritingDirection(),
   };
 };

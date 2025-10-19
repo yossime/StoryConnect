@@ -28,7 +28,6 @@ export interface RTLStyles {
  */
 export function useRTL() {
   const { isRTL } = useTranslation();
-
   /**
    * Automatically applies RTL-aware styles based on current locale
    */
@@ -170,7 +169,7 @@ export function useRTL() {
   /**
    * Gets the appropriate text alignment
    */
-  const textAlign = isRTL ? "right" : "left";
+  const textAlign = "left";
 
   /**
    * Gets the appropriate margin/padding direction

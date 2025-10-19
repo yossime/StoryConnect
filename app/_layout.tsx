@@ -11,7 +11,6 @@ import "react-native-reanimated";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { useTranslation } from "@/lib/i18n";
 import { useAuthStore } from "@/store/authStore";
 
 // Custom theme based on our design system
@@ -50,7 +49,6 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const { loadStoredAuth } = useAuthStore();
-  const { isRTL } = useTranslation();
 
   const [fontsLoaded] = useFonts({
     // Add custom fonts here if needed

@@ -96,7 +96,6 @@ export function RTLExample() {
       >
         <RTLRow style={styles.buttonContent}>
           <Ionicons
-            name={getArrowDirection("left")}
             size={20}
             color={colors.primary}
             style={flipIcon(getIconMargin("start", 8))}
@@ -113,7 +112,7 @@ export function RTLExample() {
           marginLeft: 20,
           paddingRight: 30,
           borderLeftWidth: 2,
-          borderLeftColor: colors.primary,
+          borderRightWidth: 2,
         })}
       >
         <RTLBody style={[styles.rtlDemoText, { color: colors.text }]}>

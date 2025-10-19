@@ -11,8 +11,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WelcomeScreen() {
   const colorScheme = useColorScheme();
-  const { t } = useTranslation();
+  const { t, setLocale } = useTranslation();
   const colors = Colors[colorScheme ?? "light"];
+  // setLocale("he");
 
   return (
     <SafeAreaView
