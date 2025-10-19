@@ -76,7 +76,8 @@
           "photosPermission": "Allow StoryConnect to access your photos to create stories."
         }
       ],
-      "expo-av"
+      "expo-av",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,
