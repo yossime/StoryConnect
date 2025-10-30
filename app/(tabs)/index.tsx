@@ -18,6 +18,7 @@ import { useStoriesStore } from '@/store/storiesStore';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
 
+
 interface StoryPreviewProps {
   story: any;
   onPress: () => void;

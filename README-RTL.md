@@ -84,3 +84,7 @@ function LanguageSwitcher() {
 - `RTLAwareText` במקום `Text`
 - `RTLRow` עבור layouts אופקיים
 - `useRTL()` עבור לוגיקה מותאמת אישית
+
+
+
+

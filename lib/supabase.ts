@@ -3,14 +3,13 @@ import { createClient } from "@supabase/supabase-js";
 import { Platform } from "react-native";
 import "react-native-url-polyfill/auto";
 
-// These would be your actual Supabase project credentials
-// For development, you can use environment variables
+
 const supabaseUrl =
   process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey =
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
-// Create a platform-aware storage adapter
-const createStorage = () => {
+
+  const createStorage = () => {
   if (Platform.OS !== "web") {
     return AsyncStorage;
   } else {
@@ -47,7 +46,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-// Database Types
+
 export interface Database {
   public: {
     Tables: {
@@ -340,7 +339,7 @@ export interface Database {
   };
 }
 
-// Helper functions
+
 export const uploadFile = async (
   file: string,
   path: string,

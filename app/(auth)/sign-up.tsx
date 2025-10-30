@@ -1,24 +1,25 @@
+import LoadingAnimation from "@/components/ui/loading-animation";
+import { Colors } from "@/constants/Colors";
+import { Layout } from "@/constants/Layout";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTranslation } from "@/lib/i18n";
+import { useAuthStore } from "@/store/authStore";
+import { Ionicons } from "@expo/vector-icons";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { useTranslation } from "@/lib/i18n";
-import { useAuthStore } from "@/store/authStore";
-import { Colors } from "@/constants/Colors";
-import { Layout } from "@/constants/Layout";
-import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function SignUpScreen() {
   const colorScheme = useColorScheme();
@@ -264,11 +265,22 @@ export default function SignUpScreen() {
               onPress={handleSignUp}
               disabled={isLoading}
             >
-              <Text
-                style={[styles.signUpButtonText, { color: colors.primary }]}
-              >
-                {isLoading ? t("common.loading") : t("auth.signUp")}
-              </Text>
+              {isLoading ? (
+                <View style={styles.loadingContainer}>
+                  <LoadingAnimation size={6} color={colors.primary} />
+                  <Text
+                    style={[styles.signUpButtonText, { color: colors.primary, marginLeft: 8 }]}
+                  >
+                    {t("common.loading")}
+                  </Text>
+                </View>
+              ) : (
+                <Text
+                  style={[styles.signUpButtonText, { color: colors.primary }]}
+                >
+                  {t("auth.signUp")}
+                </Text>
+              )}
             </TouchableOpacity>
 
             <View style={styles.divider}>
@@ -292,12 +304,17 @@ export default function SignUpScreen() {
                   {
                     backgroundColor: colors.surface,
                     borderColor: colors.border,
+                    opacity: isLoading ? 0.6 : 1,
                   },
                 ]}
                 onPress={() => handleProviderSignIn("google")}
                 disabled={isLoading}
               >
-                <Ionicons name="logo-google" size={20} color="#DB4437" />
+                {isLoading ? (
+                  <LoadingAnimation size={6} color={colors.text} />
+                ) : (
+                  <Ionicons name="logo-google" size={20} color="#DB4437" />
+                )}
                 <Text
                   style={[styles.providerButtonText, { color: colors.text }]}
                 >
@@ -311,12 +328,17 @@ export default function SignUpScreen() {
                   {
                     backgroundColor: colors.surface,
                     borderColor: colors.border,
+                    opacity: isLoading ? 0.6 : 1,
                   },
                 ]}
                 onPress={() => handleProviderSignIn("apple")}
                 disabled={isLoading}
               >
-                <Ionicons name="logo-apple" size={20} color={colors.text} />
+                {isLoading ? (
+                  <LoadingAnimation size={6} color={colors.text} />
+                ) : (
+                  <Ionicons name="logo-apple" size={20} color={colors.text} />
+                )}
                 <Text
                   style={[styles.providerButtonText, { color: colors.text }]}
                 >
@@ -377,6 +399,11 @@ const styles = StyleSheet.create({
     borderRadius: Layout.borderRadius.lg,
     alignItems: "center",
     marginTop: Layout.spacing.lg,
+  },
+  loadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   signUpButtonText: { fontSize: 16, fontWeight: "600" },
   divider: {

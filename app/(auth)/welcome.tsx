@@ -6,7 +6,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useTranslation } from "@/lib/i18n";
 import { router } from "expo-router";
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WelcomeScreen() {
@@ -25,9 +25,11 @@ export default function WelcomeScreen() {
           <RTLAwareView
             style={[styles.logo, { backgroundColor: colors.secondary }]}
           >
-            <RTLAwareText style={[styles.logoText, { color: colors.primary }]}>
-              SC
-            </RTLAwareText>
+            <Image
+              source={require("@/assets/images/logo.png")}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
           </RTLAwareView>
           <RTLHeader style={[styles.appName, { color: colors.text }]}>
             StoryConnect
@@ -141,9 +143,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: Layout.spacing.lg,
   },
-  logoText: {
-    fontSize: 32,
-    fontWeight: "bold",
+  logoImage: {
+    width: 60,
+    height: 60,
   },
   appName: {
     fontSize: 28,

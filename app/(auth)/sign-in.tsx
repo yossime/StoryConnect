@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import { router } from 'expo-router';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { Ionicons } from '@expo/vector-icons';
+import LoadingAnimation from '@/components/ui/loading-animation';
+import { Colors } from '@/constants/Colors';
+import { Layout } from '@/constants/Layout';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTranslation } from '@/lib/i18n';
 import { useAuthStore } from '@/store/authStore';
-import { Colors } from '@/constants/Colors';
-import { Layout } from '@/constants/Layout';
+import { Ionicons } from '@expo/vector-icons';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { router } from 'expo-router';
+import React, { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SignInScreen() {
   const colorScheme = useColorScheme();
@@ -18,6 +19,9 @@ export default function SignInScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoadingbygoogle, setIsLoadingbygoogle] = useState(false);
+  const [isLoadingbyapple, setIsLoadingbyapple] = useState(false);
+
 
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight?.() ?? 0;
@@ -37,9 +41,24 @@ export default function SignInScreen() {
 
   const handleProviderSignIn = async (provider: 'google' | 'apple') => {
     try {
+      if (provider === 'google') {
+        setIsLoadingbygoogle(true);
+      } else if (provider === 'apple') {
+        setIsLoadingbyapple(true);
+      }
       await signInWithProvider(provider);
+      if (provider === 'google') {
+        setIsLoadingbygoogle(false);
+      } else if (provider === 'apple') {
+        setIsLoadingbyapple(false);
+      }
     } catch (error: any) {
       Alert.alert(t('common.error'), error.message || t('auth.providerSignInFailed'));
+      if (provider === 'google') {
+        setIsLoadingbygoogle(false);
+      } else if (provider === 'apple') {
+        setIsLoadingbyapple(false);
+      }
     }
   };
 
@@ -117,9 +136,20 @@ export default function SignInScreen() {
               onPress={handleSignIn}
               disabled={isLoading}
             >
-              <Text style={[styles.signInButtonText, { color: colors.primary }]}>
-                {isLoading ? t('common.loading') : t('auth.signIn')}
-              </Text>
+              {isLoading ? (
+                <View style={styles.loadingContainer}>
+                  <LoadingAnimation size={6} color={colors.primary} />
+                  <Text
+                    style={[styles.signInButtonText, { color: colors.primary, marginLeft: 8 }]}
+                  >
+                    {t('common.loading')}
+                  </Text>
+                </View>
+              ) : (
+                <Text style={[styles.signInButtonText, { color: colors.primary }]}>
+                  {t('auth.signIn')}
+                </Text>
+              )}
             </TouchableOpacity>
 
             <View style={styles.divider}>
@@ -130,20 +160,42 @@ export default function SignInScreen() {
 
             <View style={styles.providerButtons}>
               <TouchableOpacity
-                style={[styles.providerButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                style={[
+                  styles.providerButton, 
+                  { 
+                    backgroundColor: colors.surface, 
+                    borderColor: colors.border,
+                    opacity: isLoadingbygoogle ? 0.6 : 1,
+                  }
+                ]}
                 onPress={() => handleProviderSignIn('google')}
-                disabled={isLoading}
+                disabled={isLoadingbygoogle}
               >
-                <Ionicons name="logo-google" size={20} color="#DB4437" />
+                {isLoadingbygoogle ? (
+                  <LoadingAnimation size={6} color={colors.text} />
+                ) : (
+                  <Ionicons name="logo-google" size={20} color="#DB4437" />
+                )}
                 <Text style={[styles.providerButtonText, { color: colors.text }]}>Google</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.providerButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                style={[
+                  styles.providerButton, 
+                  { 
+                    backgroundColor: colors.surface, 
+                    borderColor: colors.border,
+                    opacity: isLoadingbyapple ? 0.6 : 1,
+                  }
+                ]}
                 onPress={() => handleProviderSignIn('apple')}
-                disabled={isLoading}
+                disabled={isLoadingbyapple}
               >
-                <Ionicons name="logo-apple" size={20} color={colors.text} />
+                {isLoadingbyapple ? (
+                  <LoadingAnimation size={6} color={colors.text} />
+                ) : (
+                  <Ionicons name="logo-apple" size={20} color={colors.text} />
+                )}
                 <Text style={[styles.providerButtonText, { color: colors.text }]}>Apple</Text>
               </TouchableOpacity>
             </View>
@@ -183,6 +235,11 @@ const styles = StyleSheet.create({
   passwordInput: { paddingRight: 50 },
   passwordToggle: { position: 'absolute', right: Layout.spacing.md, top: Layout.spacing.md, padding: Layout.spacing.sm },
   signInButton: { paddingVertical: Layout.spacing.md, borderRadius: Layout.borderRadius.lg, alignItems: 'center', marginTop: Layout.spacing.lg },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   signInButtonText: { fontSize: 16, fontWeight: '600' },
   divider: { flexDirection: 'row', alignItems: 'center', marginVertical: Layout.spacing.xl },
   dividerLine: { flex: 1, height: 1 },

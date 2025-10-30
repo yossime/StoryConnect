@@ -1,18 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-
 import { HapticTab } from "@/components/haptic-tab";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useRTL } from "@/hooks/use-rtl";
 import { useTranslation } from "@/lib/i18n";
 import { useAuthStore } from "@/store/authStore";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
   const { user } = useAuthStore();
+  console.log('user', user);
   const { isRTL } = useRTL();
   const colors = Colors[colorScheme ?? "light"];
 
@@ -27,8 +30,9 @@ export default function TabLayout() {
           backgroundColor: colors.background,
           borderTopColor: colors.border,
           height: 80,
-          paddingBottom: 10,
+          paddingBottom: 10 + insets.bottom,
           paddingTop: 10,
+          marginBottom: insets.bottom > 0 ? insets.bottom : 12,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -90,7 +94,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* Admin tab - only visible to admins */}
       {user?.role === "admin" && (
         <Tabs.Screen
           name="admin"

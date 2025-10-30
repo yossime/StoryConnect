@@ -2,6 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
 import { create } from "zustand";
 import { supabase } from "../lib/supabase";
+import * as WebBrowser from 'expo-web-browser';
+import * as Linking from 'expo-linking';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const storage = {
   set: async (key: string, value: string) => {
@@ -127,23 +131,40 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ isLoading: false });
     }
   },
-
+  
   signInWithProvider: async (provider: "google" | "apple") => {
-    set({ isLoading: true });
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider,
-      });
-
-      if (error) throw error;
-    } catch (error) {
-      console.error("OAuth sign in error:", error);
-      throw error;
-    } finally {
-      set({ isLoading: false });
+    const redirectUrl = Linking.createURL('google-auth'); // e.g. myapp://google-auth
+  
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        redirectTo: redirectUrl,
+        queryParams: { prompt: 'consent' },
+      },
+    });
+  
+    if (error) throw error;
+  
+    if (data.url) {
+      const result = await WebBrowser.openAuthSessionAsync(
+        data.url,
+        redirectUrl
+      );
+  
+      if (result.type === 'success' && result.url) {
+        const [, queryString] = result.url.split('#');
+        const params = Object.fromEntries(queryString.split('&').map(pair => pair.split('=').map(decodeURIComponent)));
+  
+        await supabase.auth.setSession({
+          access_token: params['access_token'],
+          refresh_token: params['refresh_token'],
+        });
+      } else {
+        throw new Error('OAuth failed or cancelled');
+      }
     }
   },
-
+  
   signOut: async () => {
     set({ isLoading: true });
     try {
